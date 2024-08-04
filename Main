@@ -144,10 +144,10 @@ end
 
 local function ApplyVaseESP(Model)
   if Model:IsA("Model") then
-      local Highlight = Model.Vase:FindFirstChild("Highlight")
+      local Highlight = Model:FindFirstChild("Highlight")
       if not Highlight then
           Highlight = Instance.new("Highlight")
-          Highlight.Parent = Model.Vase
+          Highlight.Parent = Model
       end
       Highlight.FillColor = ESPColor
       Highlight.OutlineColor = ESPColor
@@ -313,4 +313,4 @@ HitboxesSection:AddButton({
     end
 })
 
-OrionLibrary:Init()
+OrionLibrary:Init()()
