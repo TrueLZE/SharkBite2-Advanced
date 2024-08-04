@@ -5,7 +5,7 @@ local Window = OrionLibrary:MakeWindow({Name = "SharkBite 2", HidePremium = fals
 
 local BoatTab = Window:MakeTab({
 	Name = "Boats",
-	Icon = "rbxassetid://4483345998",
+	Icon = "rbxassetid://7733911490",
 	PremiumOnly = false
 })
 local BoatSection = BoatTab:AddSection({
@@ -79,7 +79,7 @@ end
 
 local ESPTab = Window:MakeTab({
   Name = "ESP",
-  Icon = "rbxassetid://4483345998",
+  Icon = "rbxassetid://7733696665",
   PremiumOnly = false
 })
 
@@ -278,7 +278,7 @@ ESPSection:AddColorpicker({
 
 local SharkTab = Window:MakeTab({
     Name = "Shark",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://7733658504",
     PremiumOnly = false
 })
 
@@ -313,4 +313,4 @@ HitboxesSection:AddButton({
     end
 })
 
-OrionLibrary:Init()()
+OrionLibrary:Init()
