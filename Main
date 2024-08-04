@@ -1,5 +1,3 @@
--- [[Made by TrueLZE]] --
-
 local OrionLibrary = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLibrary:MakeWindow({Name = "SharkBite 2", HidePremium = false, IntroEnabled = true, IntroText = "SharkBite 2"})
 
@@ -78,157 +76,202 @@ for BoatID, BoatName in pairs(Boats) do
 end
 
 local ESPTab = Window:MakeTab({
-    Name = "ESP",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
+  Name = "ESP",
+  Icon = "rbxassetid://4483345998",
+  PremiumOnly = false
 })
 
 local ESPSection = ESPTab:AddSection({
-    Name = "ESP"
+  Name = "ESP"
 })
 
 local PlayerESPEnabled = false
 local SharkESPEnabled = false
+local VaseESPEnabled = false
 local ESPTransparency = 0.5
 local ESPColor = Color3.fromRGB(255, 0, 0)
 
 local function ApplyESP(Player)
-    if Player.Character and Player.Team and Player.Team.Name == "Survivor" then
-        local Highlight = Player.Character:FindFirstChild("Highlight")
-        if not Highlight then
-            Highlight = Instance.new("Highlight")
-            Highlight.Parent = Player.Character
-        end
-        Highlight.FillColor = ESPColor
-        Highlight.OutlineColor = ESPColor
-        Highlight.FillTransparency = ESPTransparency
-        Highlight.OutlineTransparency = ESPTransparency
-    end
+  if Player.Character and Player.Team and Player.Team.Name == "Survivor" then
+      local Highlight = Player.Character:FindFirstChild("Highlight")
+      if not Highlight then
+          Highlight = Instance.new("Highlight")
+          Highlight.Parent = Player.Character
+      end
+      Highlight.FillColor = ESPColor
+      Highlight.OutlineColor = ESPColor
+      Highlight.FillTransparency = ESPTransparency
+      Highlight.OutlineTransparency = ESPTransparency
+  end
 end
 
 local function RemoveESP(Player)
-    if Player.Character then
-        local Highlight = Player.Character:FindFirstChild("Highlight")
-        if Highlight then
-            Highlight:Destroy()
-        end
-    end
+  if Player.Character then
+      local Highlight = Player.Character:FindFirstChild("Highlight")
+      if Highlight then
+          Highlight:Destroy()
+      end
+  end
 end
 
 local function ApplySharkESP(Shark)
-    if Shark:IsA("Model") then
-        local PlayerOwner = Shark:FindFirstChild("PlayerOwner")
-        if PlayerOwner and PlayerOwner.Value == game.Players.LocalPlayer then
-            return
-        end
+  if Shark:IsA("Model") then
+      local PlayerOwner = Shark:FindFirstChild("PlayerOwner")
+      if PlayerOwner and PlayerOwner.Value == game.Players.LocalPlayer then
+          return
+      end
 
-        local Highlight = Shark:FindFirstChild("Highlight")
-        if not Highlight then
-            Highlight = Instance.new("Highlight")
-            Highlight.Parent = Shark
-        end
-        Highlight.FillColor = ESPColor
-        Highlight.OutlineColor = ESPColor
-        Highlight.FillTransparency = ESPTransparency
-        Highlight.OutlineTransparency = ESPTransparency
-    end
+      local Highlight = Shark:FindFirstChild("Highlight")
+      if not Highlight then
+          Highlight = Instance.new("Highlight")
+          Highlight.Parent = Shark
+      end
+      Highlight.FillColor = ESPColor
+      Highlight.OutlineColor = ESPColor
+      Highlight.FillTransparency = ESPTransparency
+      Highlight.OutlineTransparency = ESPTransparency
+  end
 end
 
 local function RemoveSharkESP(Shark)
-    local Highlight = Shark:FindFirstChild("Highlight")
-    if Highlight then
-        Highlight:Destroy()
-    end
+  local Highlight = Shark:FindFirstChild("Highlight")
+  if Highlight then
+      Highlight:Destroy()
+  end
+end
+
+local function ApplyVaseESP(Model)
+  if Model:IsA("Model") then
+      local Highlight = Model.Vase:FindFirstChild("Highlight")
+      if not Highlight then
+          Highlight = Instance.new("Highlight")
+          Highlight.Parent = Model.Vase
+      end
+      Highlight.FillColor = ESPColor
+      Highlight.OutlineColor = ESPColor
+      Highlight.FillTransparency = ESPTransparency
+      Highlight.OutlineTransparency = ESPTransparency
+  end
+end
+
+local function RemoveVaseESP(Model)
+  local Highlight = Model:FindFirstChild("Highlight")
+  if Highlight then
+      Highlight:Destroy()
+  end
 end
 
 local function UpdatePlayerESP()
-    for _, Player in pairs(game.Players:GetPlayers()) do
-        if Player ~= game.Players.LocalPlayer then
-            if PlayerESPEnabled then
-                ApplyESP(Player)
-            else
-                RemoveESP(Player)
-            end
-        end
-    end
+  for _, Player in pairs(game.Players:GetPlayers()) do
+      if Player ~= game.Players.LocalPlayer then
+          if PlayerESPEnabled then
+              ApplyESP(Player)
+          else
+              RemoveESP(Player)
+          end
+      end
+  end
 end
 
 local function UpdateSharkESP()
-    local SharksFolder = workspace:FindFirstChild("Sharks")
-    if SharksFolder then
-        for _, Shark in pairs(SharksFolder:GetChildren()) do
-            if SharkESPEnabled then
-                ApplySharkESP(Shark)
-            else
-                RemoveSharkESP(Shark)
-            end
-        end
-    end
+  local SharksFolder = workspace:FindFirstChild("Sharks")
+  if SharksFolder then
+      for _, Shark in pairs(SharksFolder:GetChildren()) do
+          if SharkESPEnabled then
+              ApplySharkESP(Shark)
+          else
+              RemoveSharkESP(Shark)
+          end
+      end
+  end
+end
+
+local function UpdateVaseESP()
+  local VasesFolder = workspace:FindFirstChild("Vases")
+  if VasesFolder then
+      for _, Vase in pairs(VasesFolder:GetChildren()) do
+          if VaseESPEnabled then
+              ApplyVaseESP(Vase)
+          else
+              RemoveVaseESP(Vase)
+          end
+      end
+  end
 end
 
 local function UpdateESP()
-    UpdatePlayerESP()
-    UpdateSharkESP()
+  UpdatePlayerESP()
+  UpdateSharkESP()
+  UpdateVaseESP()
 end
 
 game.Players.PlayerAdded:Connect(function(Player)
-    Player.CharacterAdded:Connect(function()
-        wait(1)
-        if PlayerESPEnabled then
-            ApplyESP(Player)
-        end
-    end)
-    
-    Player:GetPropertyChangedSignal("Team"):Connect(function()
-        if PlayerESPEnabled then
-            ApplyESP(Player)
-        else
-            RemoveESP(Player)
-        end
-    end)
+  Player.CharacterAdded:Connect(function()
+      wait(1)
+      if PlayerESPEnabled then
+          ApplyESP(Player)
+      end
+  end)
+  
+  Player:GetPropertyChangedSignal("Team"):Connect(function()
+      if PlayerESPEnabled then
+          ApplyESP(Player)
+      else
+          RemoveESP(Player)
+      end
+  end)
 end)
 
 game:GetService("RunService").RenderStepped:Connect(UpdateESP)
 
 ESPSection:AddToggle({
-    Name = "Player ESP",
-    Default = false,
-    Callback = function(Value)
-        PlayerESPEnabled = Value
-        UpdatePlayerESP()
-    end
+  Name = "Player ESP",
+  Default = false,
+  Callback = function(Value)
+      PlayerESPEnabled = Value
+      UpdatePlayerESP()
+  end
 })
 
 ESPSection:AddToggle({
-    Name = "Shark ESP",
-    Default = false,
-    Callback = function(Value)
-        SharkESPEnabled = Value
-        UpdateSharkESP()
-    end
+  Name = "Shark ESP",
+  Default = false,
+  Callback = function(Value)
+      SharkESPEnabled = Value
+      UpdateSharkESP()
+  end
+})
+
+ESPSection:AddToggle({
+  Name = "Vase ESP",
+  Default = false,
+  Callback = function(Value)
+      VaseESPEnabled = Value
+      UpdateVaseESP()
+  end
 })
 
 ESPSection:AddSlider({
-    Name = "ESP Transparency",
-    Min = 0,
-    Max = 0.9,
-    Default = 0.5,
-    Color = Color3.fromRGB(255, 255, 255),
-    Increment = 0.01,
-    ValueName = "Transparency",
-    Callback = function(Value)
-        ESPTransparency = Value
-        UpdateESP()
-    end
+  Name = "ESP Transparency",
+  Min = 0,
+  Max = 0.9,
+  Default = 0.5,
+  Color = Color3.fromRGB(255, 255, 255),
+  Increment = 0.01,
+  ValueName = "Transparency",
+  Callback = function(Value)
+      ESPTransparency = Value
+      UpdateESP()
+  end
 })
 
 ESPSection:AddColorpicker({
-    Name = "ESP Colour",
-    Default = Color3.fromRGB(255, 0, 0),
-    Callback = function(Value)
-        ESPColor = Value
-        UpdateESP()
-    end
+  Name = "ESP Colour",
+  Default = Color3.fromRGB(255, 0, 0),
+  Callback = function(Value)
+      ESPColor = Value
+      UpdateESP()
+  end
 })
 
 local SharkTab = Window:MakeTab({
