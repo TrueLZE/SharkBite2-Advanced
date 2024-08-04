@@ -1,0 +1,271 @@
+-- [[Made by TrueLZE]] --
+
+local OrionLibrary = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLibrary:MakeWindow({Name = "SharkBite 2", HidePremium = false, IntroEnabled = true, IntroText = "SharkBite 2"})
+
+local BoatTab = Window:MakeTab({
+	Name = "Boats",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+local BoatSection = BoatTab:AddSection({
+	Name = "Select Boat"
+})
+
+local Boats = {
+	["AthleteDucky"] = "Athlete Ducky",
+	["BabyDuckTrail"] = "Baby Duck Trail",
+	["BlueSnowmobile"] = "Blue Snowmobile",
+	["BlueWoodenMotorboat"] = "Blue Wooden Motorboat",
+	["Britannic"] = "HMHS Britannic",
+	["Catamaran"] = "Catamaran",
+	["CoffinBoat"] = "Coffin Boat",
+	["CombatBoat"] = "Combat Boat",
+	["CruiseShip"] = "Cruise Ship",
+	["DucklingBoat"] = "Duckling Boat",
+	["DuckyBoat"] = "Ducky Boat",
+	["DuckyBoatBeta"] = "The Golden Ducky",
+	["Duckmarine"] = "Duckmarine",
+	["EggSpeedBoat"] = "Eggcelerator",
+	["FestiveGalleon"] = "Festive Galleon",
+	["FishingBoat"] = "Fishing Boat",
+	["Galleon"] = "Games Galleon",
+	["GingerBoatMan"] = "Ginger Boat Man",
+	["GingerbreadSteamBoat"] = "Gingerbread Steam Boat",
+	["HoverHeart"] = "Hover-Heart",
+	["HydroTank"] = "Hydro Tank [SHRK 500 EXCLUSIVE]",
+	["Jetski"] = "Jetski",
+	["Lifeboat"] = "Lifeboat",
+	["LightBike"] = "Hover Bike",
+	["MagicWandBoat"] = "Magic Wand Boat",
+	["Marlin"] = "Marlin",
+	["MilitarySubmarine"] = "Military Submarine",
+	["PartyBoat"] = "Party Boat",
+	["PyroTank"] = "Pyro Tank",
+	["RedCanopyMotorboat"] = "Canopy Motorboat",
+	["RedMarlin"] = "Marlin GT",
+	["RGBTurretSleigh"] = "RGB Turret Sleigh",
+	["SeaBreacher"] = "Sea Breacher",
+	["SharkCageBoat"] = "Shark Cage Boat",
+	["Sleigh2022"] = "Sleigh 2022",
+	["Sleigh2023"] = "Sleigh 2023",
+	["Sloop"] = "Sloop",
+	["SmallDinghyMotorboat"] = "Small Dinghy Motorboat",
+	["SmallWoodenSailboat"] = "Small Wooden Sailboat",
+	["Snowmobile"] = "Red Snowmobile",
+	["StealthBoat"] = "Stealth Boat",
+	["Titanic"] = "Titanic",
+	["TourBoat"] = "Tour Boat",
+	["TubeBoat"] = "Double Doughnut Tube Boat",
+	["TugBoat"] = "Tug Boat",
+	["UFO"] = "UFO",
+	["UnicornBoat"] = "Unicorn Boat",
+	["VikingShip"] = "Viking Ship",
+	["ViperSpeedBoat"] = "Viper Speed Boat",
+	["Wildfire"] = "Wildfire"
+}
+
+for BoatID, BoatName in pairs(Boats) do
+    BoatTab:AddButton({
+        Name = BoatName,
+        Callback = function()
+            local Args = {
+                [1] = BoatID
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("EventsFolder"):WaitForChild("BoatSelection"):WaitForChild("UpdateHostBoat"):FireServer(unpack(Args))
+        end
+    })
+end
+
+local ESPTab = Window:MakeTab({
+    Name = "ESP",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local ESPSection = ESPTab:AddSection({
+    Name = "ESP"
+})
+
+local PlayerESPEnabled = false
+local SharkESPEnabled = false
+local ESPTransparency = 0.5
+local ESPColor = Color3.fromRGB(255, 0, 0)
+
+local function ApplyESP(Player)
+    if Player.Character and Player.Team and Player.Team.Name == "Survivor" then
+        local Highlight = Player.Character:FindFirstChild("Highlight")
+        if not Highlight then
+            Highlight = Instance.new("Highlight")
+            Highlight.Parent = Player.Character
+        end
+        Highlight.FillColor = ESPColor
+        Highlight.OutlineColor = ESPColor
+        Highlight.FillTransparency = ESPTransparency
+        Highlight.OutlineTransparency = ESPTransparency
+    end
+end
+
+local function RemoveESP(Player)
+    if Player.Character then
+        local Highlight = Player.Character:FindFirstChild("Highlight")
+        if Highlight then
+            Highlight:Destroy()
+        end
+    end
+end
+
+local function ApplySharkESP(Shark)
+    if Shark:IsA("Model") then
+        local PlayerOwner = Shark:FindFirstChild("PlayerOwner")
+        if PlayerOwner and PlayerOwner.Value == game.Players.LocalPlayer then
+            return
+        end
+
+        local Highlight = Shark:FindFirstChild("Highlight")
+        if not Highlight then
+            Highlight = Instance.new("Highlight")
+            Highlight.Parent = Shark
+        end
+        Highlight.FillColor = ESPColor
+        Highlight.OutlineColor = ESPColor
+        Highlight.FillTransparency = ESPTransparency
+        Highlight.OutlineTransparency = ESPTransparency
+    end
+end
+
+local function RemoveSharkESP(Shark)
+    local Highlight = Shark:FindFirstChild("Highlight")
+    if Highlight then
+        Highlight:Destroy()
+    end
+end
+
+local function UpdatePlayerESP()
+    for _, Player in pairs(game.Players:GetPlayers()) do
+        if Player ~= game.Players.LocalPlayer then
+            if PlayerESPEnabled then
+                ApplyESP(Player)
+            else
+                RemoveESP(Player)
+            end
+        end
+    end
+end
+
+local function UpdateSharkESP()
+    local SharksFolder = workspace:FindFirstChild("Sharks")
+    if SharksFolder then
+        for _, Shark in pairs(SharksFolder:GetChildren()) do
+            if SharkESPEnabled then
+                ApplySharkESP(Shark)
+            else
+                RemoveSharkESP(Shark)
+            end
+        end
+    end
+end
+
+local function UpdateESP()
+    UpdatePlayerESP()
+    UpdateSharkESP()
+end
+
+game.Players.PlayerAdded:Connect(function(Player)
+    Player.CharacterAdded:Connect(function()
+        wait(1)
+        if PlayerESPEnabled then
+            ApplyESP(Player)
+        end
+    end)
+    
+    Player:GetPropertyChangedSignal("Team"):Connect(function()
+        if PlayerESPEnabled then
+            ApplyESP(Player)
+        else
+            RemoveESP(Player)
+        end
+    end)
+end)
+
+game:GetService("RunService").RenderStepped:Connect(UpdateESP)
+
+ESPSection:AddToggle({
+    Name = "Player ESP",
+    Default = false,
+    Callback = function(Value)
+        PlayerESPEnabled = Value
+        UpdatePlayerESP()
+    end
+})
+
+ESPSection:AddToggle({
+    Name = "Shark ESP",
+    Default = false,
+    Callback = function(Value)
+        SharkESPEnabled = Value
+        UpdateSharkESP()
+    end
+})
+
+ESPSection:AddSlider({
+    Name = "ESP Transparency",
+    Min = 0,
+    Max = 0.9,
+    Default = 0.5,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 0.01,
+    ValueName = "Transparency",
+    Callback = function(Value)
+        ESPTransparency = Value
+        UpdateESP()
+    end
+})
+
+ESPSection:AddColorpicker({
+    Name = "ESP Colour",
+    Default = Color3.fromRGB(255, 0, 0),
+    Callback = function(Value)
+        ESPColor = Value
+        UpdateESP()
+    end
+})
+
+local SharkTab = Window:MakeTab({
+    Name = "Shark",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local HitboxesSection = SharkTab:AddSection({
+    Name = "Hitboxes"
+})
+
+local function DoubleSharkHitbox()
+    local SharksFolder = workspace:FindFirstChild("Sharks")
+    if SharksFolder then
+        for _, Shark in pairs(SharksFolder:GetChildren()) do
+            if Shark:IsA("Model") then
+                local SharkMain = Shark:FindFirstChild("SharkMain")
+                if SharkMain then
+                    local Mesh = SharkMain:FindFirstChild("Mesh")
+                    if Mesh then
+                        local SharkPart = Mesh:FindFirstChild("Shark")
+                        if SharkPart then
+                            SharkPart.Size = SharkPart.Size * 2
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+HitboxesSection:AddButton({
+    Name = "Double All Sharks Hitboxes",
+    Callback = function()
+        DoubleSharkHitbox()
+    end
+})
+
+OrionLibrary:Init()
