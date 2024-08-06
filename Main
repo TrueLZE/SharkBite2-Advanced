@@ -1,5 +1,3 @@
--- [[Made by TrueLZE] --
-
 local OrionLibrary = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLibrary:MakeWindow({Name = "SharkBite 2", HidePremium = false, IntroEnabled = true, IntroText = "SharkBite 2"})
 
