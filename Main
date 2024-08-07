@@ -311,4 +311,25 @@ HitboxesSection:AddButton({
     end
 })
 
+local PlayerTab = Window:MakeTab({
+    Name = "Player",
+    Icon = "rbxassetid://7743875962",
+    PremiumOnly = false
+})
+
+local CameraSection = PlayerTab:AddSection({
+    Name = "Camera
+})
+
+local function ToggleFreecam()
+    print("STILL WORKING ON THIS.")
+end
+
+CameraSection:AddButton({
+    Name = "Freecam",
+    Callback = function()
+        ToggleFreecam()
+    end
+})
+
 OrionLibrary:Init()
